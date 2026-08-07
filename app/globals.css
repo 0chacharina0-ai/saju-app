@@ -1,0 +1,426 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /* Five elements (오행) */
+  --color-wood: var(--wood);
+  --color-fire: var(--fire);
+  --color-earth: var(--earth);
+  --color-metal: var(--metal);
+  --color-water: var(--water);
+
+  --font-sans: 'Pretendard Variable', var(--font-noto-sans-kr), 'Noto Sans KR Fallback', sans-serif;
+  --font-serif: 'Pretendard Variable', var(--font-noto-sans-kr), sans-serif;
+  --font-display: var(--font-space-grotesk), 'Pretendard Variable', sans-serif;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Cockpit HUD — deep matte blue (#0B1021) base */
+  --background: #0b1021;
+  --foreground: oklch(0.92 0.01 250);
+
+  /* Soft charcoal surfaces (#1E293B) */
+  --card: oklch(0.28 0.03 250 / 55%);
+  --card-foreground: oklch(0.95 0.01 250);
+
+  --popover: #1e293b;
+  --popover-foreground: oklch(0.95 0.01 250);
+
+  /* Muted cyan primary — calm HUD cyan */
+  --primary: oklch(0.72 0.11 210);
+  --primary-foreground: oklch(0.99 0.005 250);
+
+  --secondary: oklch(0.32 0.03 250 / 60%);
+  --secondary-foreground: oklch(0.92 0.01 250);
+
+  --muted: oklch(0.30 0.02 250);
+  --muted-foreground: oklch(0.70 0.02 255);
+
+  /* Soft slate accent (no neon) */
+  --accent: oklch(0.62 0.08 235);
+  --accent-foreground: oklch(0.99 0.005 250);
+
+  --destructive: oklch(0.62 0.20 25);
+
+  --border: oklch(0.55 0.04 250 / 22%);
+  --input: oklch(0.60 0.03 250 / 14%);
+  --ring: oklch(0.72 0.11 210 / 70%);
+
+  --chart-1: oklch(0.72 0.11 210);
+  --chart-2: oklch(0.62 0.08 235);
+  --chart-3: oklch(0.68 0.18 20);
+  --chart-4: oklch(0.72 0.15 155);
+  --chart-5: oklch(0.78 0.12 85);
+
+  /* Five elements (오행): 木 火 土 金 水 — muted, HUD-tuned */
+  --wood: oklch(0.72 0.14 152);
+  --fire: oklch(0.65 0.18 25);
+  --earth: oklch(0.75 0.12 85);
+  --metal: oklch(0.80 0.08 210);
+  --water: oklch(0.62 0.14 250);
+
+  --radius: 1rem;
+
+  --sidebar: #0b1021;
+  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar-primary: oklch(0.72 0.11 210);
+  --sidebar-primary-foreground: oklch(0.99 0.005 250);
+  --sidebar-accent: oklch(0.62 0.08 235);
+  --sidebar-accent-foreground: oklch(0.99 0.005 250);
+  --sidebar-border: oklch(0.55 0.04 250 / 22%);
+  --sidebar-ring: oklch(0.72 0.11 210 / 70%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-background text-foreground;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  /* 한글 단어 단위 줄바꿈 — 어색한 단어 중간 끊김 방지 */
+  h1, h2, h3, h4, h5, h6, p, li, span, blockquote {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+}
+
+@layer utilities {
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+  .animate-twinkle {
+    animation: twinkle 4s ease-in-out infinite;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+  }
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  @keyframes spin-very-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .animate-float-slow {
+    animation: float-slow 8s ease-in-out infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  .animate-spin-very-slow {
+    animation: spin-very-slow 60s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  @keyframes gradient-pan {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Subtle gradient text — purple-magenta to cyan (cosmic) */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      #C084FC 0%,
+      #A855F7 50%,
+      #38BDF8 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Cosmic aurora glow text for hero title */
+  .text-destiny-gradient {
+    background-image: linear-gradient(
+      to right,
+      #C084FC,
+      #A855F7,
+      #38BDF8
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 24px rgba(168, 85, 247, 0.45));
+    animation: gradient-pan 8s ease-in-out infinite;
+    will-change: background-position;
+    transform: translateZ(0);
+  }
+
+  /* Purple-cyan bi-color for subtitles */
+  .text-bicolor-cosmic {
+    background-image: linear-gradient(
+      90deg,
+      #C084FC 0%,
+      #38BDF8 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Cosmic purple-blue CTA button */
+  .btn-cosmic {
+    background-image: linear-gradient(135deg, #A855F7 0%, #3B82F6 100%);
+    border: 2px solid transparent;
+    box-shadow:
+      0 0 20px -4px rgba(168, 85, 247, 0.5),
+      0 0 40px -10px rgba(59, 130, 246, 0.3);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+  }
+  .btn-cosmic:hover {
+    box-shadow:
+      0 0 28px -2px rgba(168, 85, 247, 0.7),
+      0 0 56px -8px rgba(59, 130, 246, 0.5);
+  }
+
+  /* Aurora radial glow layers for hero background — GPU accelerated */
+  .aurora-purple {
+    will-change: opacity;
+    transform: translateZ(0);
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 40%,
+      rgba(139, 92, 246, 0.25) 0%,
+      transparent 70%
+    );
+  }
+  .aurora-cyan {
+    will-change: opacity;
+    transform: translateZ(0);
+    background: radial-gradient(
+      ellipse 50% 40% at 70% 50%,
+      rgba(56, 189, 248, 0.18) 0%,
+      transparent 70%
+    );
+  }
+  .aurora-magenta {
+    will-change: opacity;
+    transform: translateZ(0);
+    background: radial-gradient(
+      ellipse 40% 30% at 30% 60%,
+      rgba(192, 132, 252, 0.15) 0%,
+      transparent 70%
+    );
+  }
+
+  /* Sphere purple glow — GPU accelerated */
+  .sphere-glow {
+    filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.35))
+            drop-shadow(0 0 60px rgba(56, 189, 248, 0.2));
+    will-change: filter;
+    transform: translateZ(0);
+  }
+
+  /* Glassmorphism surface — cockpit HUD panel */
+  .glass {
+    background: oklch(0.28 0.03 250 / 35%);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    border: 1px solid oklch(0.60 0.04 250 / 14%);
+    box-shadow:
+      inset 0 1px 0 0 oklch(1 0 0 / 5%),
+      0 16px 48px -20px oklch(0.12 0.03 250 / 70%);
+  }
+
+  /* Soft HUD glow (muted, not neon) */
+  .neon-glow {
+    box-shadow:
+      0 0 18px -6px var(--primary),
+      0 0 40px -16px var(--accent);
+  }
+
+  /* Hanja font + element glow */
+  .font-hanja {
+    font-family: 'Noto Sans SC', 'Noto Sans TC', var(--font-noto-sans-kr), sans-serif;
+    font-weight: 700;
+  }
+  .glow-wood { text-shadow: 0 0 10px rgba(74, 222, 128, 0.6), 0 0 20px rgba(74, 222, 128, 0.3); }
+  .glow-fire { text-shadow: 0 0 10px rgba(248, 113, 113, 0.6), 0 0 20px rgba(248, 113, 113, 0.3); }
+  .glow-earth { text-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 20px rgba(251, 191, 36, 0.3); }
+  .glow-metal { text-shadow: 0 0 10px rgba(148, 163, 184, 0.6), 0 0 20px rgba(148, 163, 184, 0.3); }
+  .glow-water { text-shadow: 0 0 10px rgba(96, 165, 250, 0.6), 0 0 20px rgba(96, 165, 250, 0.3); }
+
+  /* Subtle dotted grid overlay — HUD monitor scanlines */
+  .bg-dotgrid {
+    background-image: radial-gradient(
+      oklch(0.60 0.06 250 / 10%) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+  }
+}
+
+/* Prevent awkward line breaks on mobile — keep words together */
+body, p, span, li, h1, h2, h3, h4, h5, h6, div, button, a, label {
+  word-break: keep-all;
+}
+
+/* Dark mode readability — bright gray text on dark backgrounds */
+@media (min-width: 768px) {
+  body {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+/* Dropdown / input styling — dark background, white text for readability */
+select,
+input,
+textarea {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+select option {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+select option:checked,
+select option:hover,
+select option:focus {
+  background-color: oklch(0.72 0.11 210 / 30%);
+  color: #ffffff;
+}
+
+/* WebKit dropdown caret color on dark bg */
+select {
+  color-scheme: dark;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  /* 다크모드 백화 현상 수정 — 배경색 유지 */
+  html, body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  /* 화면의 어두운 배경/글래스 효과 제거, 흰 종이 최적화 */
+  .glass,
+  .glass * {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-color: #cccccc !important;
+    color: #000000 !important;
+  }
+  /* 인쇄 전용 보고서는 검은 글자 */
+  .print\:block {
+    color: #000000 !important;
+  }
+  /* 최상위 컨테이너 고정 높이 해제 */
+  [style*="height: 100vh"],
+  .h-screen, .min-h-screen {
+    height: auto !important;
+    min-height: auto !important;
+  }
+  /* 페이지 중간 거대 공백 해결 — 개별 카드 수준으로 세분화 */
+  .break-inside-avoid {
+    break-inside: auto !important;
+  }
+  .card, .card-avoid {
+    break-inside: avoid;
+  }
+  /* 페이지 여백 및 줄바꿈 최적화 */
+  @page {
+    margin: 1.2cm;
+    size: A4;
+  }
+}
+
+/* 모바일 여백 최적화 — 가로 폭 넓히기 */
+@media (max-width: 640px) {
+  #saju-result,
+  #additional-questions,
+  #saju-form,
+  #saju-hero {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  #saju-result .glass {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  #additional-questions .glass {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
