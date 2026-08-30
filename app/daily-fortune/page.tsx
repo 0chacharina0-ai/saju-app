@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Sun, Sparkles, RotateCcw, ArrowRight, Star, TrendingUp, Heart, Coins, Shield } from 'lucide-react'
+import { CosmicBackground } from '@/components/cosmic-background'
 
 const YEARS = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i)
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -109,33 +110,33 @@ export default function DailyFortunePage() {
   const scoreBg = (s: number) => s >= 85 ? 'from-emerald-500 to-green-500' : s >= 70 ? 'from-amber-500 to-yellow-500' : 'from-rose-500 to-red-500'
 
   return (
-    <main className="relative min-h-screen">
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-20 opacity-40 [background:radial-gradient(ellipse_at_top_left,var(--primary)_0%,transparent_45%),radial-gradient(ellipse_at_bottom_right,var(--accent)_0%,transparent_50%)]" />
+    <main className="cosmic-bg">
+      <CosmicBackground />
 
-      <section className="mx-auto max-w-2xl scroll-mt-20 px-6 py-20 pt-4">
-        <div className="mb-8 text-center">
-          <Sun className="mx-auto size-10 text-primary" />
-          <p className="mt-2 font-display text-xs font-semibold tracking-[0.35em] text-primary uppercase">Daily Fortune</p>
-          <h2 className="mt-2 text-2xl font-bold sm:text-3xl">오늘의 운세 & 일상 개운법</h2>
-          <p className="mt-3 break-keep text-sm text-muted-foreground">오늘 하루 나를 둘러싼 오행의 흐름과 일일 운세를 확인해 보세요.</p>
+      <section className="cosmic-section mx-auto max-w-2xl scroll-mt-20">
+        <div className="cosmic-header cosmic-anim mb-12">
+          <Sun className="cosmic-icon text-primary" />
+          <span className="cosmic-eyebrow">Daily Fortune</span>
+          <h2 className="cosmic-title">오늘의 운세 & 일상 개운법</h2>
+          <p className="cosmic-subtitle">오늘 하루 나를 둘러싼 오행의 흐름과 일일 운세를 확인해 보세요.</p>
         </div>
 
         {!fortune ? (
-          <div className="glass rounded-3xl p-6 sm:p-8 text-center">
+          <div className="cosmic-card cosmic-anim cosmic-anim-1 p-6 sm:p-8 text-center">
             <div className="mb-6 text-6xl">☀️</div>
             <p className="mb-6 break-keep text-sm text-muted-foreground">오늘의 기운을 받아보세요. 자정을 넘기면 새로운 운세로 갱신됩니다.</p>
             <div className="mb-6 space-y-3 text-left">
-              <label className="block text-sm font-medium text-muted-foreground">생년월일</label>
+              <label className="cosmic-label">생년월일</label>
               <div className="grid grid-cols-3 gap-3">
-                <select value={birthYear} onChange={(e) => setBirthYear(e.target.value)} className="rounded-xl border border-border bg-[#1e293b] px-4 py-3.5 text-base text-white outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-ring/40">
+                <select value={birthYear} onChange={(e) => setBirthYear(e.target.value)} className="cosmic-select">
                   <option value="">연도</option>
                   {YEARS.map((y) => (<option key={y} value={y}>{y}년</option>))}
                 </select>
-                <select value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)} className="rounded-xl border border-border bg-[#1e293b] px-4 py-3.5 text-base text-white outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-ring/40">
+                <select value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)} className="cosmic-select">
                   <option value="">월</option>
                   {MONTHS.map((m) => (<option key={m} value={m}>{m}월</option>))}
                 </select>
-                <select value={birthDay} onChange={(e) => setBirthDay(e.target.value)} className="rounded-xl border border-border bg-[#1e293b] px-4 py-3.5 text-base text-white outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-ring/40">
+                <select value={birthDay} onChange={(e) => setBirthDay(e.target.value)} className="cosmic-select">
                   <option value="">일</option>
                   {DAYS.map((d) => (<option key={d} value={d}>{d}일</option>))}
                 </select>
@@ -145,22 +146,22 @@ export default function DailyFortunePage() {
             <button
               type="button"
               onClick={drawFortune}
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-all hover:bg-primary/80 hover:shadow-lg"
+              className="cosmic-btn"
             >
               <Sparkles className="size-5" /> 오늘의 운세 확인하기
             </button>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-6 cosmic-anim">
             {/* Overall score */}
-            <div className="glass rounded-3xl p-6 sm:p-8 text-center">
+            <div className="cosmic-card p-6 sm:p-8 text-center">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">오늘의 종합 운세 점수</p>
               <p className={`mt-2 text-5xl font-bold ${scoreColor(fortune.overall)}`}>{fortune.overall}<span className="text-2xl">점</span></p>
               <p className="break-keep mt-4 text-sm leading-relaxed text-foreground/90">{fortune.luck}</p>
             </div>
 
             {/* Score bar */}
-            <div className="glass rounded-2xl p-5">
+            <div className="cosmic-card p-5">
               <div className="mb-1.5 flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground/90">오늘의 운세 지수</span>
                 <span className={`text-sm font-bold ${scoreColor(fortune.overall)}`}>{fortune.overall}%</span>
@@ -172,18 +173,18 @@ export default function DailyFortunePage() {
 
             {/* Luck & caution */}
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="glass rounded-2xl p-5">
+              <div className="cosmic-card p-5">
                 <p className="mb-2 flex items-center gap-2 text-sm font-bold text-emerald-400"><TrendingUp className="size-4" /> 좋은 시간대</p>
                 <p className="break-keep text-sm text-foreground/85">{fortune.bestTime}</p>
               </div>
-              <div className="glass rounded-2xl p-5">
+              <div className="cosmic-card p-5">
                 <p className="mb-2 flex items-center gap-2 text-sm font-bold text-rose-400"><Shield className="size-4" /> 주의 시간대</p>
                 <p className="break-keep text-sm text-foreground/85">{fortune.worstTime}</p>
               </div>
             </div>
 
             {/* Lucky items */}
-            <div className="glass rounded-2xl p-5">
+            <div className="cosmic-card p-5">
               <p className="mb-3 flex items-center gap-2 text-sm font-bold text-primary"><Star className="size-4" /> 오늘의 행운 아이템</p>
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="rounded-xl border border-border bg-secondary/20 p-3">
@@ -203,22 +204,22 @@ export default function DailyFortunePage() {
 
             {/* Category fortunes */}
             <div className="space-y-4">
-              <div className="glass rounded-2xl p-5">
+              <div className="cosmic-card p-5">
                 <p className="mb-2 flex items-center gap-2 text-sm font-bold text-rose-400"><Heart className="size-4" /> 연애운</p>
                 <p className="break-keep text-sm leading-relaxed text-foreground/85">{fortune.love}</p>
               </div>
-              <div className="glass rounded-2xl p-5">
+              <div className="cosmic-card p-5">
                 <p className="mb-2 flex items-center gap-2 text-sm font-bold text-amber-400"><Coins className="size-4" /> 재물운</p>
                 <p className="break-keep text-sm leading-relaxed text-foreground/85">{fortune.wealth}</p>
               </div>
-              <div className="glass rounded-2xl p-5">
+              <div className="cosmic-card p-5">
                 <p className="mb-2 flex items-center gap-2 text-sm font-bold text-emerald-400"><Shield className="size-4" /> 건강운</p>
                 <p className="break-keep text-sm leading-relaxed text-foreground/85">{fortune.health}</p>
               </div>
             </div>
 
             {/* Advice */}
-            <div className="rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center">
+            <div className="cosmic-result-section text-center">
               <p className="mb-2 flex items-center justify-center gap-2 text-sm font-bold text-primary"><Sparkles className="size-4" /> 오늘의 개운 조언</p>
               <p className="break-keep text-sm leading-relaxed text-foreground/90">{fortune.advice}</p>
             </div>
@@ -231,10 +232,10 @@ export default function DailyFortunePage() {
 
             {/* Actions */}
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-              <button type="button" onClick={drawFortune} className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/50 bg-primary/10 px-6 py-3 text-sm font-semibold transition-colors hover:bg-primary/20">
+              <button type="button" onClick={drawFortune} className="cosmic-btn-secondary">
                 <RotateCcw className="size-4" /> 다시 확인하기
               </button>
-              <a href="/#saju-form" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/80">
+              <a href="/#saju-form" className="cosmic-btn">
                 정밀 사주 분석하기 <ArrowRight className="size-4" />
               </a>
             </div>

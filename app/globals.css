@@ -347,6 +347,278 @@
     );
     background-size: 22px 22px;
   }
+
+  /* ===== Cosmic Detail Page System ===== */
+  /* Matches hero: deep #030307 space, teal-cyan primary, violet accent */
+
+  .cosmic-bg {
+    position: relative;
+    min-height: 100vh;
+    background: #030307;
+  }
+
+  /* Cosmic section header — large title with eyebrow tag */
+  .cosmic-header {
+    text-align: center;
+  }
+  .cosmic-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.5rem 1.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(204, 251, 241, 0.8);
+    margin-bottom: 1.5rem;
+  }
+  .cosmic-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-inline: auto;
+    filter: drop-shadow(0 0 18px rgba(45, 212, 191, 0.4));
+  }
+  .cosmic-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0.75rem;
+    color: rgba(255, 255, 255, 0.95);
+  }
+  .cosmic-subtitle {
+    font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 1rem;
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  /* Cosmic card — deep navy glassmorphism with teal-tinted border */
+  .cosmic-card {
+    background: rgba(8, 12, 28, 0.55);
+    backdrop-filter: blur(20px) saturate(130%);
+    -webkit-backdrop-filter: blur(20px) saturate(130%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 1.5rem;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 24px 64px -24px rgba(2, 4, 12, 0.85);
+  }
+  .cosmic-card-lg {
+    border-radius: 2rem;
+  }
+  .cosmic-card:hover {
+    border-color: rgba(45, 212, 191, 0.15);
+  }
+
+  /* Cosmic form input */
+  .cosmic-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(6, 10, 24, 0.6);
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.95);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cosmic-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .cosmic-input:focus {
+    border-color: rgba(45, 212, 191, 0.5);
+    box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.12);
+  }
+  .cosmic-select {
+    width: 100%;
+    appearance: none;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(6, 10, 24, 0.6);
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.95);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cosmic-select:focus {
+    border-color: rgba(45, 212, 191, 0.5);
+    box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.12);
+  }
+
+  /* Cosmic label */
+  .cosmic-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* Cosmic primary button — liquid-glass matching hero CTA */
+  .cosmic-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.95);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.18), 0 10px 30px rgba(0,0,0,0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .cosmic-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.2px;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.15) 20%,
+      rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+      rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.5) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .cosmic-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.28), 0 15px 40px rgba(45,212,191,0.12);
+  }
+  .cosmic-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Cosmic secondary button */
+  .cosmic-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.75rem 1.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .cosmic-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(45, 212, 191, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Cosmic toggle button (for gender / options) */
+  .cosmic-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(6, 10, 24, 0.4);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .cosmic-toggle[data-active="true"] {
+    border-color: rgba(45, 212, 191, 0.4);
+    background: rgba(45, 212, 191, 0.1);
+    color: rgba(204, 251, 241, 0.95);
+  }
+  .cosmic-toggle:hover:not([data-active="true"]) {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Cosmic section spacing */
+  .cosmic-section {
+    padding-block: 6rem;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .cosmic-section {
+      padding-block: 7rem;
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Cosmic entrance animation */
+  @keyframes cosmic-fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .cosmic-anim {
+    animation: cosmic-fade-up 0.6s ease-out both;
+  }
+  .cosmic-anim-1 { animation-delay: 0.1s; }
+  .cosmic-anim-2 { animation-delay: 0.2s; }
+  .cosmic-anim-3 { animation-delay: 0.3s; }
+
+  /* Cosmic result section */
+  .cosmic-result-section {
+    margin-top: 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: linear-gradient(135deg, rgba(8,12,28,0.4) 0%, rgba(12,16,36,0.2) 50%, transparent 100%);
+    padding: 2rem;
+  }
+
+  /* Cosmic keyword badge */
+  .cosmic-badge {
+    border-radius: 9999px;
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    background: rgba(45, 212, 191, 0.08);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(204, 251, 241, 0.9);
+  }
+
+  /* Cosmic paywall */
+  .cosmic-paywall {
+    margin-top: 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(45, 212, 191, 0.25);
+    background: rgba(45, 212, 191, 0.04);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cosmic-anim, .cosmic-anim-1, .cosmic-anim-2, .cosmic-anim-3 {
+      animation: none;
+    }
+  }
 }
 
 /* Prevent awkward line breaks on mobile — keep words together */

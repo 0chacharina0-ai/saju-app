@@ -6,6 +6,7 @@ import type { SajuResult } from '@/lib/saju'
 import { ELEMENTS, type ElementKey } from '@/lib/saju'
 import { generateCompatibilityReport, type CompatibilitySection } from '@/lib/compatibility-report'
 import { cleanText } from '@/lib/text-utils'
+import { CosmicBackground } from './cosmic-background'
 
 const SCORE_COLORS = (score: number) =>
   score >= 80 ? 'text-emerald-400' : score >= 65 ? 'text-amber-400' : 'text-rose-400'
@@ -62,7 +63,7 @@ function ElementComparisonGraph({ countsA, countsB, nameA, nameB }: { countsA: R
   const maxVal = Math.max(...Object.values(countsA), ...Object.values(countsB), 1)
 
   return (
-    <div className="rounded-2xl border border-border bg-secondary/20 p-6">
+    <div className="cosmic-card p-6">
       <p className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
         <Sparkles className="size-4 text-primary" /> 두 사람의 오행(木火土金水) 1:1 비교 그래프
       </p>
@@ -126,7 +127,7 @@ function ScoreBar({ score }: { score: number }) {
 
 function ReportChapter({ section, icon: Icon, blurred }: { section: CompatibilitySection; icon: typeof Heart; blurred?: boolean }) {
   return (
-    <div className={`mt-8 rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/5 via-accent/5 to-transparent p-6 sm:p-8 ${blurred ? 'select-none' : ''}`}>
+    <div className={`mt-8 cosmic-result-section p-6 sm:p-8 ${blurred ? 'select-none' : ''}`}>
       <div className={`mb-5 flex items-center gap-3 border-b border-border pb-4 ${blurred ? 'blur-sm' : ''}`}>
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/40 bg-primary/10">
           <Icon className="size-5 text-primary" />
@@ -167,7 +168,7 @@ function ReportChapter({ section, icon: Icon, blurred }: { section: Compatibilit
 
 function ActionGuideCard({ icon: Icon, title, children }: { icon: typeof Heart; title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-border bg-secondary/20 p-5">
+    <div className="cosmic-card p-5">
       <p className="mb-3 flex items-center gap-2 text-sm font-bold text-foreground">
         <Icon className="size-4 text-primary" /> {title}
       </p>
@@ -209,8 +210,10 @@ export function CompatibilityResultView({
   const handleDownload = () => { window.print() }
 
   return (
-    <section className="mx-auto max-w-4xl px-6 pb-28 pt-4">
-      <div className="glass rounded-[2rem] p-6 sm:p-10">
+    <main className="cosmic-bg">
+      <CosmicBackground />
+      <section className="mx-auto max-w-4xl px-6 pb-28 pt-4 sm:px-8">
+      <div className="cosmic-card cosmic-card-lg cosmic-anim p-6 sm:p-10">
         {/* Header */}
         <header className="mb-8 border-b border-border pb-6 text-center">
           <p className="font-display text-sm font-semibold tracking-[0.35em] text-gradient uppercase">Compatibility Report</p>
@@ -223,7 +226,7 @@ export function CompatibilityResultView({
         </header>
 
         {/* Total Score - always visible */}
-        <div className="mb-8 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center">
+        <div className="mb-8 cosmic-result-section text-center">
           <div className="mb-2 flex items-center justify-center gap-2">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">종합 궁합 점수</p>
             <ScoreTooltip />
@@ -238,7 +241,7 @@ export function CompatibilityResultView({
         </div>
 
         {/* Element Harmony Analysis - always visible */}
-        <div className="mb-8 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6">
+        <div className="mb-8 cosmic-result-section">
           <p className="mb-3 flex items-center gap-2 text-sm font-bold text-primary">
             <Sparkles className="size-4" /> 오행(木火土金水) 상성 해석
           </p>
@@ -262,7 +265,7 @@ export function CompatibilityResultView({
         </div>
 
         {/* Chemistry Chart - always visible */}
-        <div className="mb-8 rounded-2xl border border-border bg-secondary/20 p-6">
+        <div className="mb-8 cosmic-card p-6">
           <p className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
             <Sparkles className="size-4 text-primary" /> 두 사람의 종합 궁합 케미 차트
           </p>
@@ -270,7 +273,7 @@ export function CompatibilityResultView({
         </div>
 
         {/* Preview summary - first section intro only */}
-        <div className="mb-8 rounded-2xl border border-primary/30 bg-primary/5 p-6">
+        <div className="mb-8 cosmic-result-section">
           <p className="mb-2 flex items-center gap-2 text-sm font-bold text-primary">
             <Heart className="size-4" /> 궁합 요약 미리보기
           </p>
@@ -290,7 +293,7 @@ export function CompatibilityResultView({
             </div>
 
             {/* Paywall CTA */}
-            <div className="mt-8 rounded-2xl border-2 border-primary/40 bg-primary/5 p-6 text-center">
+            <div className="mt-8 cosmic-paywall">
               <div className="mb-2 flex items-center justify-center gap-3">
                 <span className="text-lg text-muted-foreground/50 line-through">49,800원</span>
                 <span className="rounded-full bg-yellow-500/20 px-2 py-0.5 text-xs font-bold text-yellow-400">50% 얼리버드</span>
@@ -304,7 +307,7 @@ export function CompatibilityResultView({
               </div>
 
               <button type="button" onClick={() => setPaid(true)}
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-base font-bold text-primary-foreground transition-all hover:bg-primary/80 hover:shadow-lg sm:w-auto">
+                className="cosmic-btn w-full sm:w-auto">
                 <Rocket className="size-5" />
                 24,900원에 궁합 심층 리포트 열기
               </button>
@@ -324,7 +327,7 @@ export function CompatibilityResultView({
             </div>
 
             {/* TOC */}
-            <div className="mb-8 rounded-2xl border border-border bg-secondary/20 p-6">
+            <div className="mb-8 cosmic-card p-6">
               <p className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
                 <BookOpen className="size-4 text-primary" /> 목차
               </p>
@@ -332,7 +335,7 @@ export function CompatibilityResultView({
                 {report.sections.map((s) => {
                   const Icon = CHAPTER_ICONS[s.chapter - 1] ?? Heart
                   return (
-                    <div key={s.chapter} className="flex items-center gap-3 rounded-xl border border-border/50 bg-background/40 p-3">
+                    <div key={s.chapter} className="flex items-center gap-3 rounded-xl border border-border/40 bg-background/20 p-3">
                       <Icon className="size-4 shrink-0 text-primary/70" />
                       <span className="break-keep flex-1 text-sm font-medium text-foreground/90">CHAPTER {s.chapter}. {s.title}</span>
                     </div>
@@ -347,7 +350,7 @@ export function CompatibilityResultView({
             ))}
 
             {/* Action Guide */}
-            <div className="mt-10 rounded-3xl border-2 border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-transparent p-6 sm:p-8">
+            <div className="mt-10 cosmic-result-section p-6 sm:p-8" style={{ borderColor: 'oklch(0.75 0.12 85 / 30%)' }}>
               <h3 className="break-keep mb-6 flex items-center gap-2 font-serif text-xl font-bold text-amber-400">
                 <Target className="size-5" /> 실전 행동 가이드
               </h3>
@@ -403,16 +406,17 @@ export function CompatibilityResultView({
 
             {/* Final CTA */}
             <div className="no-print mt-8 flex flex-col gap-3 sm:flex-row">
-              <button onClick={handleDownload} className="flex items-center justify-center gap-2 rounded-full border border-border bg-secondary/40 px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary/60">
+              <button onClick={handleDownload} className="cosmic-btn-secondary">
                 <Download className="size-4" /> PDF로 저장
               </button>
-              <button onClick={onReset} className="flex items-center justify-center gap-2 rounded-full border border-primary/50 bg-primary/10 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-primary/20">
+              <button onClick={onReset} className="cosmic-btn-secondary">
                 <RotateCcw className="size-4" /> 다시 분석하기
               </button>
             </div>
           </>
         )}
-      </div>
-    </section>
+        </div>
+      </section>
+    </main>
   )
 }

@@ -5,6 +5,7 @@ import { Calendar, Clock, User as User2, Venus, Mars, MapPin, Sparkles, Heart, B
 import { REGIONS } from '@/lib/saju'
 import { calculateSaju, type SajuResult } from '@/lib/saju'
 import { generateNewYearReport, type NewYearReport } from '@/lib/newyear-report'
+import { CosmicBackground } from './cosmic-background'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const YEARS = Array.from({ length: 100 }, (_, i) => CURRENT_YEAR - i)
@@ -20,8 +21,8 @@ const HOURS: { label: string; value: number }[] = [
   { label: '술시 (19:00~20:59)', value: 20 }, { label: '해시 (21:00~22:59)', value: 22 },
 ]
 
-const selectClass = 'w-full appearance-none rounded-xl border border-border bg-[#1e293b] px-4 py-3.5 text-base text-white outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-ring/40'
-const labelClass = 'mb-2 flex items-center gap-1.5 text-sm font-medium text-muted-foreground'
+const selectClass = 'cosmic-select'
+const labelClass = 'cosmic-label'
 
 const SCORE_COLORS = (s: number) => s >= 80 ? 'text-emerald-400' : s >= 65 ? 'text-amber-400' : 'text-rose-400'
 const SCORE_BG = (s: number) => s >= 80 ? 'from-emerald-500 to-green-500' : s >= 65 ? 'from-amber-500 to-yellow-500' : 'from-rose-500 to-red-500'
@@ -30,7 +31,7 @@ function NewYearResult({ report, name }: { report: NewYearReport; name: string }
   return (
     <div className="space-y-6">
       {/* Keywords + Score */}
-      <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center">
+      <div className="cosmic-result-section text-center">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">2027 정미년 종합 운세 점수</p>
         <p className={`mt-2 text-5xl font-bold ${SCORE_COLORS(report.totalScore)}`}>{report.totalScore}<span className="text-2xl">점</span></p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -42,7 +43,7 @@ function NewYearResult({ report, name }: { report: NewYearReport; name: string }
       </div>
 
       {/* Half-year graph */}
-      <div className="rounded-2xl border border-border bg-secondary/20 p-6">
+      <div className="cosmic-card p-6">
         <p className="mb-4 text-sm font-bold text-foreground">2027년 상반기/하반기 운의 궤도</p>
         <div className="space-y-3">
           {report.halfYearGraph.map((item) => (
@@ -60,11 +61,11 @@ function NewYearResult({ report, name }: { report: NewYearReport; name: string }
       </div>
 
       {/* Monthly calendar */}
-      <div className="rounded-2xl border border-border bg-secondary/20 p-6">
+      <div className="cosmic-card p-6">
         <p className="mb-4 text-sm font-bold text-foreground">1월~12월 월별 운세 타임라인</p>
         <div className="space-y-3">
           {report.monthly.map((m) => (
-            <div key={m.month} className="rounded-xl border border-border/50 bg-background/40 p-4">
+            <div key={m.month} className="rounded-xl border border-border/40 bg-background/20 p-4">
               <p className="break-keep mb-1 text-sm font-bold text-primary">{m.month}월 — {m.energy}</p>
               <p className="break-keep mb-2 text-sm leading-relaxed text-foreground/80">{m.tip}</p>
               <p className="break-keep text-xs text-rose-400/80">⚠ {m.avoid}</p>
@@ -74,7 +75,7 @@ function NewYearResult({ report, name }: { report: NewYearReport; name: string }
       </div>
 
       {/* Opportunities */}
-      <div className="rounded-2xl border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-500/5 to-transparent p-6">
+      <div className="cosmic-result-section p-6" style={{ borderColor: 'oklch(0.72 0.14 152 / 30%)' }}>
         <p className="mb-4 text-sm font-bold text-emerald-400">반드시 잡아야 할 3가지 기회</p>
         <div className="space-y-3">
           {report.opportunities.map((opp, i) => (
@@ -87,7 +88,7 @@ function NewYearResult({ report, name }: { report: NewYearReport; name: string }
       </div>
 
       {/* Risks */}
-      <div className="rounded-2xl border-2 border-rose-500/30 bg-gradient-to-br from-rose-500/5 to-transparent p-6">
+      <div className="cosmic-result-section p-6" style={{ borderColor: 'oklch(0.62 0.20 25 / 30%)' }}>
         <p className="mb-4 text-sm font-bold text-rose-400">피해야 할 3가지 변수</p>
         <div className="space-y-3">
           {report.risks.map((risk, i) => (
@@ -100,7 +101,7 @@ function NewYearResult({ report, name }: { report: NewYearReport; name: string }
       </div>
 
       {/* Family section */}
-      <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5 p-6">
+      <div className="cosmic-result-section p-6">
         <p className="mb-3 flex items-center gap-2 text-sm font-bold text-primary"><Heart className="size-4" /> 가족운 · 맞춤 조건 분석</p>
         <p className="break-keep text-sm leading-relaxed text-foreground/85 whitespace-pre-line">{report.familySection}</p>
       </div>
@@ -132,8 +133,10 @@ export function NewYearForm() {
 
   if (report) {
     return (
-      <section className="mx-auto max-w-4xl px-6 pb-28 pt-4">
-        <div className="glass rounded-[2rem] p-6 sm:p-10">
+      <main className="cosmic-bg">
+        <CosmicBackground />
+        <section className="mx-auto max-w-4xl px-6 pb-28 pt-4 sm:px-8">
+        <div className="cosmic-card cosmic-card-lg cosmic-anim p-6 sm:p-10">
           <header className="mb-8 border-b border-border pb-6 text-center">
             <p className="font-display text-sm font-semibold tracking-[0.35em] text-gradient uppercase">2027 New Year Fortune</p>
             <h2 className="mt-2 text-2xl font-bold sm:text-3xl">{report.name}님의 2027 정미년 신년운세</h2>
@@ -147,24 +150,24 @@ export function NewYearForm() {
           </div>
         </div>
       </section>
+    </main>
     )
   }
 
   return (
-    <section className="mx-auto max-w-2xl scroll-mt-20 px-5 py-20 pt-4 sm:px-6">
-      <div className="mb-8 text-center">
-        <p className="font-display text-xs font-semibold tracking-[0.35em] text-primary uppercase">2027 New Year Fortune</p>
-        <h2 className="mt-2 text-2xl font-bold sm:text-3xl">2027 정미년 신년운세</h2>
-        <p className="mt-3 break-keep text-sm text-muted-foreground">
-          2027년 정미년 한 해의 흐름을 태어난 날의 명리 궤도로 풀이합니다.
-        </p>
+    <main className="cosmic-bg">
+      <CosmicBackground />
+      <section className="cosmic-section mx-auto max-w-2xl scroll-mt-20">
+      <div className="cosmic-header cosmic-anim mb-12">
+        <span className="cosmic-eyebrow">2027 New Year Fortune</span>
+        <h2 className="cosmic-title">2027 정미년 신년운세</h2>
+        <p className="cosmic-subtitle">2027년 정미년 한 해의 흐름을 태어난 날의 명리 궤도로 풀이합니다.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="glass rounded-3xl p-6 sm:p-8">
+      <form onSubmit={handleSubmit} className="cosmic-card cosmic-anim cosmic-anim-1 p-6 sm:p-8">
         <div className="mb-6">
           <label className={labelClass}><User2 className="size-4" /> 이름</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="이름"
-            className="w-full rounded-xl border border-border bg-[#1e1e2e] px-4 py-3.5 text-base text-white outline-none transition-colors placeholder:text-white/40 focus:border-primary/60 focus:ring-2 focus:ring-ring/40" />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="이름" className="cosmic-input" />
         </div>
 
         <div className="mb-6">
@@ -184,8 +187,8 @@ export function NewYearForm() {
         <div className="mb-6">
           <span className={labelClass}>성별</span>
           <div className="grid grid-cols-2 gap-3">
-            <button type="button" onClick={() => setGender('male')} aria-pressed={gender === 'male'} className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${gender === 'male' ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}><Mars className="size-4" /> 남성</button>
-            <button type="button" onClick={() => setGender('female')} aria-pressed={gender === 'female'} className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${gender === 'female' ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}><Venus className="size-4" /> 여성</button>
+            <button type="button" onClick={() => setGender('male')} aria-pressed={gender === 'male'} className="cosmic-toggle" data-active={gender === 'male'}><Mars className="size-4" /> 남성</button>
+            <button type="button" onClick={() => setGender('female')} aria-pressed={gender === 'female'} className="cosmic-toggle" data-active={gender === 'female'}><Venus className="size-4" /> 여성</button>
           </div>
         </div>
 
@@ -199,7 +202,7 @@ export function NewYearForm() {
           <div className="grid grid-cols-3 gap-2">
             {([['single', '미혼'], ['married', '기혼'], ['divorced', '돌싱']] as const).map(([val, label]) => (
               <button key={val} type="button" onClick={() => setMaritalStatus(val)} aria-pressed={maritalStatus === val}
-                className={`break-keep rounded-lg border px-2 py-2.5 text-sm font-medium transition-colors ${maritalStatus === val ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}>{label}</button>
+                className="cosmic-toggle break-keep" data-active={maritalStatus === val}>{label}</button>
             ))}
           </div>
         </div>
@@ -208,16 +211,17 @@ export function NewYearForm() {
           <span className={labelClass}><Baby className="size-4" /> 자녀 유무</span>
           <div className="grid grid-cols-2 gap-2">
             <button type="button" onClick={() => setHasChildren(true)} aria-pressed={hasChildren}
-              className={`break-keep rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${hasChildren ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}>자녀 있음</button>
+              className="cosmic-toggle break-keep" data-active={hasChildren}>자녀 있음</button>
             <button type="button" onClick={() => setHasChildren(false)} aria-pressed={!hasChildren}
-              className={`break-keep rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${!hasChildren ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}>자녀 없음</button>
+              className="cosmic-toggle break-keep" data-active={!hasChildren}>자녀 없음</button>
           </div>
         </div>
 
-        <button type="submit" className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-primary/60 bg-primary/10 px-6 py-4 text-base font-bold text-foreground transition-all hover:border-primary hover:bg-primary/20 hover:neon-glow focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none">
+        <button type="submit" className="cosmic-btn w-full">
           <Sparkles className="size-5 text-primary" /> 2027 신년운세 보기
         </button>
       </form>
     </section>
+    </main>
   )
 }

@@ -7,6 +7,7 @@ import { calculateSaju, type SajuResult } from '@/lib/saju'
 import { generateThemeReport, type ThemeReport, type ThemeReportSection } from '@/lib/theme-report'
 import { MBTI_DATA, MBTI_LIST, type MBTIType } from '@/lib/mbti-data'
 import { cleanText } from '@/lib/text-utils'
+import { CosmicBackground } from './cosmic-background'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const YEARS = Array.from({ length: 100 }, (_, i) => CURRENT_YEAR - i)
@@ -22,8 +23,8 @@ const HOURS: { label: string; value: number }[] = [
   { label: '술시 (19:00~20:59)', value: 20 }, { label: '해시 (21:00~22:59)', value: 22 },
 ]
 
-const selectClass = 'w-full appearance-none rounded-lg border border-border bg-[#1e293b] px-3 py-2.5 text-sm text-white outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-ring/40'
-const labelClass = 'mb-2 flex items-center gap-1.5 text-sm font-medium text-muted-foreground'
+const selectClass = 'cosmic-select'
+const labelClass = 'cosmic-label'
 
 const SCORE_COLORS = (s: number) => s >= 80 ? 'text-emerald-400' : s >= 65 ? 'text-amber-400' : 'text-rose-400'
 const SCORE_BG = (s: number) => s >= 80 ? 'from-emerald-500 to-green-500' : s >= 65 ? 'from-amber-500 to-yellow-500' : 'from-rose-500 to-red-500'
@@ -153,23 +154,25 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
   if (reportState) {
     const halfSections = Math.ceil(reportState.report.sections.length / 2)
     return (
-      <section className="mx-auto max-w-4xl px-6 pb-28 pt-4">
-        <div className="glass rounded-[2rem] p-6 sm:p-10">
+      <main className="cosmic-bg">
+        <CosmicBackground />
+        <section className="mx-auto max-w-4xl px-6 pb-28 pt-4 sm:px-8">
+        <div className="cosmic-card cosmic-card-lg cosmic-anim p-6 sm:p-10">
           <header className="mb-8 border-b border-border pb-6 text-center">
-            <Icon className="mx-auto size-10 text-primary" />
+            <Icon className="cosmic-icon text-primary" style={{ width: '3rem', height: '3rem' }} />
             <p className="mt-2 font-display text-xs font-semibold tracking-[0.35em] text-gradient uppercase">Theme Report</p>
-            <h2 className="mt-2 text-2xl font-bold sm:text-3xl">{reportState.name}님의 {config.title}</h2>
+            <h2 className="cosmic-title mt-2">{reportState.name}님의 {config.title}</h2>
           </header>
 
           {/* Total score - always visible */}
-          <div className="mb-6 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center">
+          <div className="cosmic-result-section mb-6 text-center">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">종합 점수</p>
             <p className={`mt-2 text-4xl font-bold ${SCORE_COLORS(reportState.report.totalScore)}`}>{reportState.report.totalScore}<span className="text-xl">점</span></p>
           </div>
 
           {/* MBTI x Saju visual card (love theme only) - always visible */}
           {themeKey === 'love' && reportState.report.mbti && reportState.report.dayMasterStemKr && (
-            <div className="mb-6 rounded-2xl border-2 border-rose-500/30 bg-gradient-to-br from-rose-500/10 via-primary/5 to-accent/5 p-6">
+            <div className="cosmic-result-section mb-6" style={{ borderColor: 'oklch(0.65 0.18 25 / 30%)' }}>
               <div className="mb-3 flex items-center gap-2">
                 <Brain className="size-5 text-rose-400" />
                 <p className="text-xs font-bold uppercase tracking-wider text-rose-400">사주 x MBTI 애정 성향 분석</p>
@@ -208,7 +211,7 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
               </div>
 
               {/* Paywall CTA */}
-              <div className="mt-8 rounded-2xl border-2 border-primary/40 bg-primary/5 p-6 text-center">
+              <div className="cosmic-paywall">
                 <div className="mb-2 flex items-center justify-center gap-3">
                   <span className="text-lg text-muted-foreground/50 line-through">19,800원</span>
                   <span className="rounded-full bg-yellow-500/20 px-2 py-0.5 text-xs font-bold text-yellow-400">50% 할인</span>
@@ -222,7 +225,7 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
                 </div>
 
                 <button type="button" onClick={() => setPaid(true)}
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-base font-bold text-primary-foreground transition-all hover:bg-primary/80 hover:shadow-lg sm:w-auto">
+                  className="cosmic-btn w-full sm:w-auto">
                   <Rocket className="size-5" />
                   9,900원에 전체 리포트 열기
                 </button>
@@ -247,7 +250,7 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
               ))}
 
               {/* Action guide */}
-              <div className="mt-8 rounded-2xl border-2 border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-transparent p-6">
+              <div className="cosmic-result-section mt-8" style={{ borderColor: 'oklch(0.75 0.12 85 / 30%)' }}>
                 <p className="mb-4 text-sm font-bold text-amber-400">실전 행동 가이드</p>
                 <div className="space-y-3">
                   {reportState.report.actionGuide.map((guide, i) => (
@@ -266,34 +269,37 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
               <p className="break-keep mt-6 text-sm leading-relaxed text-muted-foreground">{cleanText(reportState.report.closing)}</p>
 
               <div className="no-print mt-8 flex flex-col gap-3 sm:flex-row">
-                <button onClick={() => window.print()} className="flex items-center justify-center gap-2 rounded-full border border-border bg-secondary/40 px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary/60">
+                <button onClick={() => window.print()} className="cosmic-btn-secondary">
                   <Download className="size-4" /> PDF로 저장
                 </button>
-                <button onClick={() => { setReportState(null); setPaid(false) }} className="flex items-center justify-center gap-2 rounded-full border border-primary/50 bg-primary/10 px-6 py-3 text-sm font-semibold transition-colors hover:bg-primary/20">
+                <button onClick={() => { setReportState(null); setPaid(false) }} className="cosmic-btn-secondary">
                   <RotateCcw className="size-4" /> 다시 분석하기
                 </button>
               </div>
             </>
           )}
         </div>
-      </section>
+        </section>
+      </main>
     )
   }
 
   return (
-    <section className="mx-auto max-w-2xl scroll-mt-20 px-6 py-20 pt-4">
-      <div className="mb-8 text-center">
-        <Icon className="mx-auto size-10 text-primary" />
-        <p className="mt-2 font-display text-xs font-semibold tracking-[0.35em] text-primary uppercase">Theme Report</p>
-        <h2 className="mt-2 text-2xl font-bold sm:text-3xl">{config.title}</h2>
-        <p className="mt-3 break-keep text-sm text-muted-foreground">{config.desc}</p>
+    <main className="cosmic-bg">
+      <CosmicBackground />
+      <section className="cosmic-section mx-auto max-w-2xl scroll-mt-20">
+      <div className="cosmic-header cosmic-anim mb-12">
+        <Icon className="cosmic-icon text-primary" />
+        <span className="cosmic-eyebrow">Theme Report</span>
+        <h2 className="cosmic-title">{config.title}</h2>
+        <p className="cosmic-subtitle">{config.desc}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="glass rounded-3xl p-6 sm:p-8">
+      <form onSubmit={handleSubmit} className="cosmic-card cosmic-anim cosmic-anim-1 p-6 sm:p-8">
         <div className="mb-6">
           <label className={labelClass}><User2 className="size-4" /> 이름</label>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="이름"
-            className="w-full rounded-lg border border-border bg-[#1e1e2e] px-3 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-primary/60 focus:ring-2 focus:ring-ring/40" />
+            className="cosmic-input" />
         </div>
 
         <div className="mb-6">
@@ -313,8 +319,8 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
         <div className="mb-6">
           <span className={labelClass}>성별</span>
           <div className="grid grid-cols-2 gap-3">
-            <button type="button" onClick={() => setGender('male')} aria-pressed={gender === 'male'} className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${gender === 'male' ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}><Mars className="size-4" /> 남성</button>
-            <button type="button" onClick={() => setGender('female')} aria-pressed={gender === 'female'} className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${gender === 'female' ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}><Venus className="size-4" /> 여성</button>
+            <button type="button" onClick={() => setGender('male')} aria-pressed={gender === 'male'} data-active={gender === 'male'} className="cosmic-toggle"><Mars className="size-4" /> 남성</button>
+            <button type="button" onClick={() => setGender('female')} aria-pressed={gender === 'female'} data-active={gender === 'female'} className="cosmic-toggle"><Venus className="size-4" /> 여성</button>
           </div>
         </div>
 
@@ -324,7 +330,7 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
         </div>
 
         {themeKey === 'love' && (
-          <div className="mb-8 rounded-xl border border-rose-500/30 bg-rose-500/5 p-4">
+          <div className="mb-8 rounded-xl border p-4" style={{ borderColor: 'oklch(0.65 0.18 25 / 25%)', background: 'oklch(0.65 0.18 25 / 5%)' }}>
             <label className={labelClass}><Brain className="size-4 text-rose-400" /> 내 MBTI <span className="text-xs font-normal text-muted-foreground/60">(사주 x MBTI 결합 분석에 사용)</span></label>
             <select value={mbti} onChange={(e) => setMbti(e.target.value as MBTIType | '')} className={selectClass}>
               <option value="">MBTI 선택 (선택)</option>
@@ -336,25 +342,26 @@ export function ThemeForm({ themeKey }: { themeKey: ThemeReport['themeKey'] }) {
           </div>
         )}
 
-        <div className="mb-8 rounded-2xl border border-slate-700/50 bg-slate-800/50 p-6">
+        <div className="cosmic-result-section mb-8">
           <p className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
             <Sparkles className="size-4 text-primary" />
             {THEME_KEY_CARDS[themeKey].title}
           </p>
           <div className="space-y-3">
             {THEME_KEY_CARDS[themeKey].items.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 rounded-xl border border-slate-700/50 bg-slate-800/50 p-4">
+              <div key={i} className="flex items-start gap-3 rounded-xl border border-border/50 bg-background/30 p-4">
                 <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">{i + 1}</span>
-                <p className="break-keep text-sm leading-relaxed text-slate-200">{item}</p>
+                <p className="break-keep text-sm leading-relaxed text-foreground/80">{item}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <button type="submit" className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-primary/60 bg-primary/10 px-6 py-4 text-base font-bold text-foreground transition-all hover:border-primary hover:bg-primary/20 hover:neon-glow focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none">
+        <button type="submit" className="cosmic-btn w-full">
           <Sparkles className="size-5 text-primary" /> {config.title} 리포트 보기
         </button>
       </form>
-    </section>
+      </section>
+    </main>
   )
 }

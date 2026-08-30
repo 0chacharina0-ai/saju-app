@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import { Search, BookOpen, Palette, Circle as HelpCircle, ChevronDown, ArrowRight, Sparkles } from 'lucide-react'
 import { GUIDE_TERMS, OHAENG_TIPS, QA_ITEMS } from '@/lib/saju-guide'
 import Link from 'next/link'
+import { CosmicBackground } from './cosmic-background'
 
 const ELEMENT_COLORS: Record<string, string> = {
   wood: 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400',
@@ -21,7 +22,7 @@ function Accordion({ title, icon: Icon, children, defaultOpen = false }: {
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="rounded-2xl border border-border bg-secondary/20 overflow-hidden">
+    <div className="cosmic-card overflow-hidden">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center gap-3 p-5 text-left transition-colors hover:bg-secondary/40">
         <Icon className="size-5 shrink-0 text-primary" />
         <span className="break-keep flex-1 text-base font-bold text-foreground">{title}</span>
@@ -54,14 +55,14 @@ export function SajuGuide() {
   }, [query])
 
   return (
-    <section className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20 pt-4">
-      <div className="mb-8 text-center">
-        <p className="font-display text-xs font-semibold tracking-[0.35em] text-primary uppercase">Saju Guide</p>
-        <h2 className="mt-2 text-2xl font-bold sm:text-3xl">초보자를 위한 사주/오행 가이드</h2>
-        <p className="mt-3 break-keep text-sm text-muted-foreground">
-          사주의 기본 개념부터 오행별 개운법까지, 일상 언어로 쉽게 풀어낸 사주 백과사전
-        </p>
-      </div>
+    <main className="cosmic-bg">
+      <CosmicBackground />
+      <section className="cosmic-section mx-auto max-w-3xl scroll-mt-20">
+        <div className="cosmic-header cosmic-anim mb-12">
+          <span className="cosmic-eyebrow">Saju Guide</span>
+          <h2 className="cosmic-title">초보자를 위한 사주/오행 가이드</h2>
+          <p className="cosmic-subtitle">사주의 기본 개념부터 오행별 개운법까지 일상 언어로 쉽게 풀어낸 사주 백과사전</p>
+        </div>
 
       {/* Search bar */}
       <div className="mb-8">
@@ -72,7 +73,7 @@ export function SajuGuide() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="궁금한 사주 용어나 개운법을 검색해 보세요"
-            className="w-full rounded-full border border-border bg-[#1e1e2e] py-3.5 pl-12 pr-4 text-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-primary/60 focus:ring-2 focus:ring-ring/40"
+            className="cosmic-input pl-12"
           />
         </div>
       </div>
@@ -84,7 +85,7 @@ export function SajuGuide() {
           <div className="space-y-3">
             {filteredTerms.length === 0 && <p className="text-sm text-muted-foreground">검색 결과가 없어요.</p>}
             {filteredTerms.map((term, i) => (
-              <div key={i} className="rounded-xl border border-border/50 bg-background/40 p-4">
+              <div key={i} className="rounded-xl border border-border/40 bg-background/20 p-4">
                 <div className="mb-1 flex items-center gap-2">
                   <span className="break-keep text-sm font-bold text-primary">{term.term}</span>
                   <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs text-primary/70">{term.category}</span>
@@ -120,7 +121,7 @@ export function SajuGuide() {
           <div className="space-y-3">
             {filteredQA.length === 0 && <p className="text-sm text-muted-foreground">검색 결과가 없어요.</p>}
             {filteredQA.map((item, i) => (
-              <div key={i} className="rounded-xl border border-border/50 bg-background/40 p-4">
+              <div key={i} className="rounded-xl border border-border/40 bg-background/20 p-4">
                 <p className="break-keep mb-2 text-sm font-bold text-primary">Q. {item.question}</p>
                 <p className="break-keep mb-2 text-sm leading-relaxed text-foreground/80">A. {item.answer}</p>
                 <div className="mt-3 space-y-1 rounded-lg bg-secondary/20 p-3">
@@ -134,14 +135,15 @@ export function SajuGuide() {
       </div>
 
       {/* CTA */}
-      <div className="mt-10 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center">
+      <div className="cosmic-result-section text-center">
         <Sparkles className="mx-auto size-6 text-primary" />
         <p className="break-keep mt-3 text-sm font-bold text-foreground">내 사주의 부족한 오행 기운을 심층 리포트로 확인하기</p>
         <p className="break-keep mt-1 text-xs text-muted-foreground">위 가이드는 기본 개념입니다. 사주 입력 후 맞춤 심층 리포트로 정확한 용신과 개운법을 받아보세요.</p>
-        <Link href="/#saju-form" className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/80">
+        <Link href="/#saju-form" className="cosmic-btn mt-4">
           심층 리포트 받기 <ArrowRight className="size-4" />
         </Link>
-      </div>
-    </section>
+        </div>
+      </section>
+    </main>
   )
 }

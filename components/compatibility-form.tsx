@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react'
 import { User as User2, Calendar, Clock, Venus, Mars, MapPin, Heart, Sparkles } from 'lucide-react'
 import { REGIONS } from '@/lib/saju'
 import { calculateSaju, type SajuResult } from '@/lib/saju'
+import { CosmicBackground } from './cosmic-background'
 
 type PersonForm = {
   name: string
@@ -35,8 +36,8 @@ const HOURS: { label: string; value: number }[] = [
   { label: '해시 (21:00~22:59)', value: 22 },
 ]
 
-const selectClass = 'w-full appearance-none rounded-xl border border-border bg-[#1e293b] px-4 py-3.5 text-base text-white outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-ring/40'
-const labelClass = 'mb-2 flex items-center gap-1.5 text-sm font-medium text-muted-foreground'
+const selectClass = 'cosmic-select'
+const labelClass = 'cosmic-label'
 
 function PersonInput({ label, person, onChange }: {
   label: string
@@ -46,7 +47,7 @@ function PersonInput({ label, person, onChange }: {
   const region = REGIONS[person.regionIndex]
 
   return (
-    <div className="rounded-2xl border border-border bg-secondary/20 p-5">
+    <div className="cosmic-card p-5">
       <p className="mb-4 flex items-center gap-2 text-sm font-bold text-primary">
         <Heart className="size-4" /> {label}
       </p>
@@ -58,7 +59,7 @@ function PersonInput({ label, person, onChange }: {
           value={person.name}
           onChange={(e) => onChange({ ...person, name: e.target.value })}
           placeholder="이름"
-          className="w-full rounded-xl border border-border bg-[#1e1e2e] px-4 py-3.5 text-base text-white outline-none transition-colors placeholder:text-white/40 focus:border-primary/60 focus:ring-2 focus:ring-ring/40"
+          className="cosmic-input"
         />
       </div>
 
@@ -87,12 +88,12 @@ function PersonInput({ label, person, onChange }: {
       <div className="mb-4">
         <span className={labelClass}>성별</span>
         <div className="grid grid-cols-2 gap-2">
-          <button type="button" onClick={() => onChange({ ...person, gender: 'male' })} aria-pressed={person.gender === 'male'}
-            className={`flex items-center justify-center gap-2 rounded-xl border-2 px-4 py-3.5 text-base font-medium transition-colors ${person.gender === 'male' ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}>
+          <button type="button" onClick={() => onChange({ ...person, gender: 'male' })} aria-pressed={person.gender === 'male'} data-active={person.gender === 'male'}
+            className="cosmic-toggle">
             <Mars className="size-4" /> 남성
           </button>
-          <button type="button" onClick={() => onChange({ ...person, gender: 'female' })} aria-pressed={person.gender === 'female'}
-            className={`flex items-center justify-center gap-2 rounded-xl border-2 px-4 py-3.5 text-base font-medium transition-colors ${person.gender === 'female' ? 'border-primary bg-primary/15 text-primary' : 'border-border bg-secondary/40 text-muted-foreground hover:text-foreground'}`}>
+          <button type="button" onClick={() => onChange({ ...person, gender: 'female' })} aria-pressed={person.gender === 'female'} data-active={person.gender === 'female'}
+            className="cosmic-toggle">
             <Venus className="size-4" /> 여성
           </button>
         </div>
@@ -140,27 +141,27 @@ export function CompatibilityForm({
   }
 
   return (
-    <section className="mx-auto max-w-3xl scroll-mt-20 px-5 py-20 pt-4 sm:px-6">
-      <div className="mb-8 text-center">
-        <p className="font-display text-xs font-semibold tracking-[0.35em] text-primary uppercase">Compatibility Analysis</p>
-        <h2 className="mt-2 text-2xl font-bold sm:text-3xl">1:1 심층 궁합 보고서</h2>
-        <p className="mt-3 break-keep text-sm text-muted-foreground">
-          두 사람의 태어난 시공간을 교차하여, 오행의 조화와 충·합의 흐름으로 궁합의 깊이를 풀이합니다.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="glass rounded-3xl p-6 sm:p-8">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <PersonInput label="첫 번째 사람" person={personA} onChange={setPersonA} />
-          <PersonInput label="두 번째 사람" person={personB} onChange={setPersonB} />
+    <main className="cosmic-bg">
+      <CosmicBackground />
+      <section className="cosmic-section mx-auto max-w-3xl scroll-mt-20">
+        <div className="cosmic-header cosmic-anim mb-12">
+          <span className="cosmic-eyebrow">Compatibility Analysis</span>
+          <h2 className="cosmic-title">1:1 심층 궁합 보고서</h2>
+          <p className="cosmic-subtitle">두 사람의 태어난 시공간을 교차하여 오행의 조화와 충·합의 흐름으로 궁합의 깊이를 풀이합니다.</p>
         </div>
 
-        <button type="submit"
-          className="group relative mt-8 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-primary/60 bg-primary/10 px-6 py-4 text-base font-bold text-foreground transition-all hover:border-primary hover:bg-primary/20 hover:neon-glow focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none">
-          <Sparkles className="size-5 text-primary" />
-          궁합 분석하기
-        </button>
-      </form>
-    </section>
+        <form onSubmit={handleSubmit} className="cosmic-card cosmic-anim cosmic-anim-1 p-6 sm:p-8">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <PersonInput label="첫 번째 사람" person={personA} onChange={setPersonA} />
+            <PersonInput label="두 번째 사람" person={personB} onChange={setPersonB} />
+          </div>
+
+          <button type="submit" className="cosmic-btn w-full">
+            <Sparkles className="size-5 text-primary" />
+            궁합 분석하기
+          </button>
+        </form>
+      </section>
+    </main>
   )
 }

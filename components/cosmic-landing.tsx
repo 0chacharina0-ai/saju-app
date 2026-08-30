@@ -6,8 +6,23 @@ import { useInView, useReducedMotion } from 'framer-motion'
 import { NineCosmicGuardians } from './nine-cosmic-guardians'
 
 const ROBOT_VIDEO_WIDTH = 1784
-const ROBOT_OVERLAY_WIDTH_FRACTION = 0.182
-const ROBOT_TRACK_POINTS = [0, -7, -7, 0, 10, 18, 24, 28, 36, 40, 43]
+const ROBOT_VIDEO_HEIGHT = 1024
+const ROBOT_OVERLAY_WIDTH = ROBOT_VIDEO_WIDTH * 0.179
+const ROBOT_OVERLAY_HEIGHT = ROBOT_VIDEO_HEIGHT * 0.178
+
+const ROBOT_TRACK_POINTS = [
+  [0, 0, 0, 1],
+  [-7, -0.5, -0.6, 1.005],
+  [-7, -0.5, -0.6, 1.005],
+  [0, 0, 0, 1],
+  [10, 0.5, 0.5, 0.998],
+  [18, 1, 0.9, 0.996],
+  [24, 1.5, 1.2, 0.994],
+  [28, 1.5, 1.4, 0.993],
+  [36, 1.5, 1.7, 0.992],
+  [40, 1, 1.9, 0.992],
+  [43, 0.5, 2, 0.992],
+]
 
 const ROBOT_PLANETS = [
   { name: 'Mercury', color: '#FFD39A', radius: 9, size: 1.4, duration: 8, delay: -1.2 },
@@ -22,6 +37,7 @@ const ROBOT_PLANETS = [
 ]
 
 function RobotOrbitOverlay({ videoRef }: { videoRef: RefObject<HTMLVideoElement | null> }) {
+  const trackRef = useRef<HTMLDivElement>(null)
   const screenRef = useRef<HTMLDivElement>(null)
   const isVisible = useInView(screenRef, { amount: 0.1 })
   const prefersReducedMotion = useReducedMotion()
@@ -29,16 +45,32 @@ function RobotOrbitOverlay({ videoRef }: { videoRef: RefObject<HTMLVideoElement 
 
   useEffect(() => {
     let animationFrame = 0
+    let targetX = 0, targetY = 0, targetRot = 0, targetScale = 1
+    let currentX = 0, currentY = 0, currentRot = 0, currentScale = 1
 
     const syncWithRobot = () => {
-      const screen = screenRef.current
+      const track = trackRef.current
       const video = videoRef.current
-      if (screen && video && video.readyState >= 2) {
+      if (track && video && video.readyState >= 2) {
         const time = video.currentTime % 10
         const index = Math.min(Math.floor(time), ROBOT_TRACK_POINTS.length - 2)
         const progress = time - index
-        const offset = ROBOT_TRACK_POINTS[index] + (ROBOT_TRACK_POINTS[index + 1] - ROBOT_TRACK_POINTS[index]) * progress
-        screen.style.setProperty('--robot-track-x', `${offset / (ROBOT_VIDEO_WIDTH * ROBOT_OVERLAY_WIDTH_FRACTION) * 100}%`)
+        const [x0, y0, r0, s0] = ROBOT_TRACK_POINTS[index]
+        const [x1, y1, r1, s1] = ROBOT_TRACK_POINTS[index + 1]
+        const e = progress * progress * (3 - 2 * progress)
+        targetX = x0 + (x1 - x0) * e
+        targetY = y0 + (y1 - y0) * e
+        targetRot = r0 + (r1 - r0) * e
+        targetScale = s0 + (s1 - s0) * e
+
+        currentX += (targetX - currentX) * 0.35
+        currentY += (targetY - currentY) * 0.35
+        currentRot += (targetRot - currentRot) * 0.3
+        currentScale += (targetScale - currentScale) * 0.3
+
+        track.style.transform =
+          `translate(${currentX / ROBOT_OVERLAY_WIDTH * 100}%, ${currentY / ROBOT_OVERLAY_HEIGHT * 100}%) ` +
+          `rotate(${currentRot.toFixed(2)}deg) scale(${currentScale.toFixed(4)})`
       }
       animationFrame = requestAnimationFrame(syncWithRobot)
     }
@@ -51,55 +83,66 @@ function RobotOrbitOverlay({ videoRef }: { videoRef: RefObject<HTMLVideoElement 
     <div
       ref={screenRef}
       aria-hidden="true"
-      className={`robot-orbit-screen ${prefersReducedMotion ? 'robot-orbit-static' : ''} ${!isVisible ? 'robot-orbit-paused' : ''}`}
-      style={{ animationPlayState: isVisible ? 'running' : 'paused' }}
+      className="robot-orbit-stage"
     >
-      <svg viewBox="0 0 100 64" className="robot-orbit-svg" preserveAspectRatio="none">
-        <defs>
-          <radialGradient id="robot-screen-glow" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#123b53" stopOpacity="0.96" />
-            <stop offset="100%" stopColor="#061522" stopOpacity="0.99" />
-          </radialGradient>
-          <filter id="robot-star-blur" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.8" />
-          </filter>
-        </defs>
-        <rect width="100" height="64" fill="url(#robot-screen-glow)" />
-        <g className="robot-orbit-rings" fill="none" stroke="#8dd9e5" strokeOpacity="0.22" strokeWidth="0.25">
-          {ROBOT_PLANETS.map((planet) => (
-            <ellipse key={`${planet.name}-ring`} cx="50" cy="32" rx={planet.radius} ry={planet.radius * 0.62} />
-          ))}
-        </g>
-        <g className="robot-orbit-particles" fill="#dffcff">
-          <circle cx="16" cy="21" r="0.35" />
-          <circle cx="81" cy="16" r="0.25" />
-          <circle cx="76" cy="51" r="0.3" />
-          <circle cx="27" cy="49" r="0.22" />
-          <circle cx="63" cy="8" r="0.18" />
-        </g>
-        <circle className="robot-orbit-star-glow" cx="50" cy="32" r="5" fill="#ffd87e" opacity="0.38" filter="url(#robot-star-blur)" />
-        <circle className="robot-orbit-star" cx="50" cy="32" r="2.6" fill="#fff1b3" />
-        <circle cx="49.2" cy="31.2" r="0.65" fill="#ffffff" opacity="0.9" />
-        {ROBOT_PLANETS.map((planet) => (
-          <g
-            key={planet.name}
-            className="robot-orbit-planet"
-            style={{
-              transformOrigin: '50px 32px',
-              animationDuration: `${planet.duration}s`,
-              animationDelay: `${planet.delay}s`,
-              animationPlayState: isStatic ? 'paused' : 'running',
-            }}
-          >
-            {planet.name === 'Saturn' && (
-              <ellipse cx={50 + planet.radius} cy="32" rx="3.1" ry="1" fill="none" stroke={planet.color} strokeOpacity="0.7" strokeWidth="0.45" transform={`rotate(-15 ${50 + planet.radius} 32)`} />
-            )}
-            <circle cx={50 + planet.radius} cy="32" r={planet.size} fill={planet.color} opacity="0.95" />
-            <circle cx={50 + planet.radius - planet.size * 0.35} cy={32 - planet.size * 0.35} r={planet.size * 0.3} fill="#ffffff" opacity="0.5" />
-          </g>
-        ))}
-      </svg>
-      <div className="robot-orbit-scanlines" />
+      <div ref={trackRef} className="robot-orbit-track">
+        <div
+          className={`robot-orbit-screen ${prefersReducedMotion ? 'robot-orbit-static' : ''} ${!isVisible ? 'robot-orbit-paused' : ''}`}
+          style={{ animationPlayState: isVisible ? 'running' : 'paused' }}
+        >
+          <svg viewBox="0 0 100 64" className="robot-orbit-svg" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <radialGradient id="robot-screen-glow" cx="50%" cy="50%" r="70%">
+                <stop offset="0%" stopColor="#123b53" stopOpacity="0.96" />
+                <stop offset="100%" stopColor="#061522" stopOpacity="0.99" />
+              </radialGradient>
+              <filter id="robot-star-blur" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="1.8" />
+              </filter>
+            </defs>
+            <rect width="100" height="64" fill="url(#robot-screen-glow)" />
+            <g className="robot-orbit-rings" fill="none" stroke="#8dd9e5" strokeOpacity="0.22" strokeWidth="0.25">
+              {ROBOT_PLANETS.map((planet) => (
+                <ellipse key={`${planet.name}-ring`} cx="50" cy="32" rx={planet.radius} ry={planet.radius * 0.62} />
+              ))}
+            </g>
+            <g className="robot-orbit-particles" fill="#dffcff">
+              <circle cx="16" cy="21" r="0.35" />
+              <circle cx="81" cy="16" r="0.25" />
+              <circle cx="76" cy="51" r="0.3" />
+              <circle cx="27" cy="49" r="0.22" />
+              <circle cx="63" cy="8" r="0.18" />
+            </g>
+            <circle className="robot-orbit-star-glow" cx="50" cy="32" r="5" fill="#ffd87e" opacity="0.38" filter="url(#robot-star-blur)" />
+            <circle className="robot-orbit-star" cx="50" cy="32" r="2.6" fill="#fff1b3" />
+            <circle cx="49.2" cy="31.2" r="0.65" fill="#ffffff" opacity="0.9" />
+            {ROBOT_PLANETS.map((planet) => (
+              <g
+                key={planet.name}
+                className="robot-orbit-planet"
+                style={{
+                  transformOrigin: '50px 32px',
+                  animationDuration: `${planet.duration}s`,
+                  animationDelay: `${planet.delay}s`,
+                  animationPlayState: isStatic ? 'paused' : 'running',
+                }}
+              >
+                {planet.name === 'Saturn' && (
+                  <ellipse cx={50 + planet.radius} cy="32" rx="3.1" ry="1" fill="none" stroke={planet.color} strokeOpacity="0.7" strokeWidth="0.45" transform={`rotate(-15 ${50 + planet.radius} 32)`} />
+                )}
+                <circle cx={50 + planet.radius} cy="32" r={planet.size} fill={planet.color} opacity="0.95" />
+                <circle cx={50 + planet.radius - planet.size * 0.35} cy={32 - planet.size * 0.35} r={planet.size * 0.3} fill="#ffffff" opacity="0.5" />
+              </g>
+            ))}
+          </svg>
+          <div className="robot-orbit-scanlines" />
+          <div className="robot-orbit-scanline-moving" />
+          <div className="robot-orbit-vignette" />
+          <div className="robot-orbit-glare" />
+          <div className="robot-orbit-bloom" />
+          <div className="robot-orbit-bezel" />
+        </div>
+      </div>
     </div>
   )
 }
@@ -147,16 +190,26 @@ export function CosmicLanding() {
           background: rgba(255, 255, 255, 0.04);
           box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
         }
+        .robot-orbit-stage {
+          position: absolute;
+          left: 9.95%;
+          top: 12.4%;
+          width: 17.9%;
+          height: 17.8%;
+          z-index: 2;
+          pointer-events: none;
+          overflow: visible;
+        }
+        .robot-orbit-track {
+          position: absolute;
+          inset: 0;
+          will-change: transform;
+          transform-origin: 50% 50%;
+        }
         .robot-orbit-screen {
           position: absolute;
-          left: 9.8%;
-          top: 15.2%;
-          width: 18.2%;
-          height: 18.6%;
-          z-index: 2;
+          inset: 0;
           overflow: hidden;
-          transform: translateX(var(--robot-track-x, 0%));
-          will-change: transform;
           border-radius: 16% / 19%;
           background: #061522;
           box-shadow: inset 0 0 12px rgba(119, 229, 238, 0.24), 0 0 12px rgba(102, 218, 229, 0.13);
@@ -185,9 +238,51 @@ export function CosmicLanding() {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background: repeating-linear-gradient(180deg, rgba(183, 244, 244, 0.06) 0, rgba(183, 244, 244, 0.06) 1px, transparent 1px, transparent 4px);
+          background: repeating-linear-gradient(180deg, rgba(183, 244, 244, 0.04) 0, rgba(183, 244, 244, 0.04) 1px, transparent 1px, transparent 3px);
           mix-blend-mode: screen;
-          opacity: 0.55;
+          opacity: 0.4;
+        }
+        .robot-orbit-scanline-moving {
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 14%;
+          pointer-events: none;
+          background: linear-gradient(180deg, transparent, rgba(183, 244, 244, 0.05) 50%, transparent);
+          mix-blend-mode: screen;
+          animation: robot-scanline-roll 6s linear infinite;
+        }
+        .robot-orbit-vignette {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: radial-gradient(ellipse 95% 90% at 50% 50%, transparent 55%, rgba(2, 8, 20, 0.55) 100%);
+          mix-blend-mode: multiply;
+          opacity: 0.85;
+          border-radius: inherit;
+        }
+        .robot-orbit-glare {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 18%, transparent 40%, transparent 70%, rgba(255, 255, 255, 0.02) 88%, rgba(255, 255, 255, 0.06) 100%);
+          mix-blend-mode: screen;
+          border-radius: inherit;
+        }
+        .robot-orbit-bloom {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: radial-gradient(ellipse 60% 55% at 50% 48%, rgba(77, 184, 255, 0.08) 0%, transparent 70%);
+          mix-blend-mode: screen;
+          border-radius: inherit;
+        }
+        .robot-orbit-bezel {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          box-shadow: inset 0 0 6px 2px rgba(2, 8, 20, 0.5), inset 0 0 1px rgba(183, 244, 244, 0.3);
+          border-radius: inherit;
         }
         .robot-orbit-static .robot-orbit-planet {
           animation: none;
@@ -200,6 +295,9 @@ export function CosmicLanding() {
         .robot-orbit-paused .robot-orbit-star-glow {
           animation-play-state: paused;
         }
+        .robot-orbit-paused .robot-orbit-scanline-moving {
+          animation-play-state: paused;
+        }
         @keyframes robot-orbit-spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
@@ -207,6 +305,10 @@ export function CosmicLanding() {
         @keyframes robot-orbit-pulse {
           0%, 100% { opacity: 0.72; transform: scale(0.94); }
           50% { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes robot-scanline-roll {
+          0% { top: -14%; }
+          100% { top: 100%; }
         }
       `}</style>
 
