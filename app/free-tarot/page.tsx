@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+<<<<<<< HEAD
 import { Sparkles, RotateCcw, ArrowRight, Check, Heart, Briefcase, Coins, HelpCircle } from 'lucide-react'
 import { CosmicBackground } from '@/components/cosmic-background'
 import { TAROT_DECK, TarotCardBack, TarotCardFront, TarotCardFlip, type TarotCardData } from '@/components/tarot-card'
@@ -52,6 +53,26 @@ const TAROT_THEMES: TarotTheme[] = [
     guideQuestions: ['"재물운의 흐름과 해결 방향이 궁금할 때"', '"복잡하게 꼬인 문제를 근본적으로 풀고 싶을 때"'],
     positions: ['현재 상황', '핵심 원인', '외부 영향', '해결 방향', '최종 조언'],
   },
+=======
+import { Sparkles, RotateCcw, ArrowRight, Check } from 'lucide-react'
+import { CosmicBackground } from '@/components/cosmic-background'
+import { TAROT_DECK, TarotCardBack, TarotCardFront, TarotCardFlip, type TarotCardData } from '@/components/tarot-card'
+
+type SpreadType = 'single' | 'three' | 'five'
+
+type SpreadConfig = {
+  type: SpreadType
+  count: number
+  label: string
+  desc: string
+  positions: string[]
+}
+
+const SPREADS: SpreadConfig[] = [
+  { type: 'single', count: 1, label: '1장 뽑기', desc: '오늘의 운세 · Yes or No', positions: ['오늘의 기운'] },
+  { type: 'three', count: 3, label: '3장 뽑기', desc: '과거 · 현재 · 미래', positions: ['과거', '현재', '미래'] },
+  { type: 'five', count: 5, label: '5장 뽑기', desc: '깊은 고민 해결 & 조언', positions: ['현재 상황', '핵심 원인', '외부 영향', '해결 방향', '최종 조언'] },
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
 ]
 
 /** Fisher–Yates shuffle returning a new array */
@@ -66,18 +87,31 @@ function shuffle<T>(arr: T[]): T[] {
 
 export default function FreeTarotPage() {
   const [phase, setPhase] = useState<'spread-select' | 'intro' | 'selecting' | 'result'>('spread-select')
+<<<<<<< HEAD
   const [selectedTheme, setSelectedTheme] = useState<TarotTheme | null>(null)
+=======
+  const [selectedSpread, setSelectedSpread] = useState<SpreadConfig | null>(null)
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
   const [question, setQuestion] = useState('')
   const [gridCards, setGridCards] = useState<TarotCardData[]>([])
   const [selectedIndices, setSelectedIndices] = useState<number[]>([])
 
+<<<<<<< HEAD
   const pickTheme = (theme: TarotTheme) => {
     setSelectedTheme(theme)
+=======
+  const pickSpread = (spread: SpreadConfig) => {
+    setSelectedSpread(spread)
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
     setPhase('intro')
   }
 
   const startSelection = () => {
+<<<<<<< HEAD
     if (!selectedTheme) return
+=======
+    if (!selectedSpread) return
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
     // Shuffle the full 22-card deck and show 9 face-down cards
     const shuffled = shuffle(TAROT_DECK).slice(0, 9)
     setGridCards(shuffled)
@@ -86,12 +120,20 @@ export default function FreeTarotPage() {
   }
 
   const toggleCard = (index: number) => {
+<<<<<<< HEAD
     if (!selectedTheme) return
+=======
+    if (!selectedSpread) return
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
     setSelectedIndices((prev) => {
       if (prev.includes(index)) {
         return prev.filter((i) => i !== index)
       }
+<<<<<<< HEAD
       if (prev.length >= selectedTheme.count) {
+=======
+      if (prev.length >= selectedSpread.count) {
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
         return prev
       }
       return [...prev, index]
@@ -104,7 +146,11 @@ export default function FreeTarotPage() {
 
   const reset = () => {
     setPhase('spread-select')
+<<<<<<< HEAD
     setSelectedTheme(null)
+=======
+    setSelectedSpread(null)
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
     setQuestion('')
     setGridCards([])
     setSelectedIndices([])
@@ -119,6 +165,7 @@ export default function FreeTarotPage() {
           <Sparkles className="cosmic-icon text-primary" />
           <span className="cosmic-eyebrow">Free Tarot Reading</span>
           <h2 className="cosmic-title">무료 타로 — 마음의 거울</h2>
+<<<<<<< HEAD
           <p className="cosmic-subtitle">
             마음속 고민 테마를 선택하고 운명의 카드를 직접 골라보세요. 타로는 거울처럼 내 마음의 답을 비춰주는 도구예요.
           </p>
@@ -195,13 +242,60 @@ export default function FreeTarotPage() {
               </div>
             </div>
 
+=======
+          <p className="cosmic-subtitle">마음속에 떠오르는 질문을 가만히 떠올리며 9장의 카드 중 운명의 카드를 직접 골라보세요. 타로는 맞춤보다 거울처럼 내 마음을 비춰주는 도구예요.</p>
+          <div className="cosmic-result-section mt-6 text-left">
+            <p className="break-keep text-sm leading-relaxed text-primary/90">근미래(3개월 이내)의 구체적인 고민을 떠올릴 때 가장 잘 답해줘요. &ldquo;이직할까?&rdquo; &ldquo;그 사람 속마음은?&rdquo; 같은 질문이 좋아요.</p>
+          </div>
+        </div>
+
+        {/* ===== Phase 1: Spread selection ===== */}
+        {phase === 'spread-select' && (
+          <div className="space-y-4 cosmic-anim cosmic-anim-1">
+            {SPREADS.map((spread) => (
+              <button
+                key={spread.type}
+                type="button"
+                onClick={() => pickSpread(spread)}
+                className="cosmic-card flex w-full items-center gap-4 p-5 text-left transition-all hover:border-primary/40"
+              >
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-xl border border-primary/30 bg-primary/10">
+                  <span className="text-2xl font-bold text-primary">{spread.count}</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-base font-bold text-foreground">{spread.label}</p>
+                  <p className="mt-0.5 break-keep text-sm text-muted-foreground">{spread.desc}</p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {spread.positions.map((pos) => (
+                      <span key={pos} className="cosmic-badge" style={{ fontSize: '0.7rem' }}>{pos}</span>
+                    ))}
+                  </div>
+                </div>
+                <ArrowRight className="size-5 shrink-0 text-muted-foreground/50" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* ===== Phase 2: Intro (question input) ===== */}
+        {phase === 'intro' && selectedSpread && (
+          <div className="cosmic-card cosmic-anim p-6 sm:p-8 text-center">
+            <div className="cosmic-result-section mb-6 text-center" style={{ marginTop: 0 }}>
+              <p className="text-sm font-bold text-primary">{selectedSpread.label}</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{selectedSpread.desc}</p>
+            </div>
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
             <div className="mb-6 space-y-4">
               <label className="cosmic-label justify-center">궁금한 질문을 떠올려 보세요 (선택)</label>
               <input
                 type="text"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
+<<<<<<< HEAD
                 placeholder="예: 그 사람의 요즘 속마음은? / 3개월 안에 이직할 수 있을까요?"
+=======
+                placeholder="예: 3개월 안에 이직할 수 있을까요? / 그 사람의 요즘 속마음은?"
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                 className="cosmic-input"
               />
             </div>
@@ -211,9 +305,13 @@ export default function FreeTarotPage() {
               <TarotCardBack />
             </div>
 
+<<<<<<< HEAD
             <p className="mb-6 break-keep text-sm text-muted-foreground">
               마음을 가라앉히고 질문에 집중한 뒤 카드를 섞어 보세요.
             </p>
+=======
+            <p className="mb-6 break-keep text-sm text-muted-foreground">마음을 가라앉히고 질문에 집중한 뒤 카드를 섞어 보세요.</p>
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
             <button type="button" onClick={startSelection} className="cosmic-btn">
               <Sparkles className="size-5" /> 카드 섞기
             </button>
@@ -221,15 +319,26 @@ export default function FreeTarotPage() {
         )}
 
         {/* ===== Phase 3: Card selection (9-card grid) ===== */}
+<<<<<<< HEAD
         {phase === 'selecting' && selectedTheme && gridCards.length === 9 && (
+=======
+        {phase === 'selecting' && selectedSpread && gridCards.length === 9 && (
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
           <div className="cosmic-card cosmic-anim p-5 sm:p-8">
             {/* Progress + instructions */}
             <div className="mb-6 text-center">
               <p className="break-keep text-sm font-medium text-foreground">
+<<<<<<< HEAD
                 9장의 카드 중 <span className="text-primary font-bold">{selectedTheme.count}장</span>을 선택하세요
               </p>
               <div className="mt-3 flex items-center justify-center gap-2">
                 {Array.from({ length: selectedTheme.count }).map((_, i) => (
+=======
+                9장의 카드 중 <span className="text-primary font-bold">{selectedSpread.count}장</span>을 선택하세요
+              </p>
+              <div className="mt-3 flex items-center justify-center gap-2">
+                {Array.from({ length: selectedSpread.count }).map((_, i) => (
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                   <div
                     key={i}
                     className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold transition-all ${
@@ -243,8 +352,13 @@ export default function FreeTarotPage() {
                 ))}
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
+<<<<<<< HEAD
                 {selectedIndices.length < selectedTheme.count
                   ? `${selectedTheme.count - selectedIndices.length}장 더 선택할 수 있어요`
+=======
+                {selectedIndices.length < selectedSpread.count
+                  ? `${selectedSpread.count - selectedIndices.length}장 더 선택할 수 있어요`
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                   : '모든 카드를 선택했습니다. 결과를 확인하세요'}
               </p>
             </div>
@@ -253,7 +367,11 @@ export default function FreeTarotPage() {
             <div className="mx-auto grid max-w-lg grid-cols-3 gap-3 sm:gap-4">
               {gridCards.map((card, i) => {
                 const isSelected = selectedIndices.includes(i)
+<<<<<<< HEAD
                 const maxReached = selectedIndices.length >= selectedTheme.count
+=======
+                const maxReached = selectedIndices.length >= selectedSpread.count
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                 return (
                   <div key={i} className="relative">
                     {/* Selection order badge */}
@@ -275,13 +393,21 @@ export default function FreeTarotPage() {
 
             {/* Actions */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+<<<<<<< HEAD
               <button type="button" onClick={() => setSelectedIndices([])} className="cosmic-btn-secondary">
+=======
+              <button type="button" onClick={() => { setSelectedIndices([]) }} className="cosmic-btn-secondary">
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                 <RotateCcw className="size-4" /> 선택 초기화
               </button>
               <button
                 type="button"
                 onClick={revealResult}
+<<<<<<< HEAD
                 disabled={selectedIndices.length < selectedTheme.count}
+=======
+                disabled={selectedIndices.length < selectedSpread.count}
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                 className="cosmic-btn disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Sparkles className="size-5" /> 결과 보기
@@ -291,11 +417,19 @@ export default function FreeTarotPage() {
         )}
 
         {/* ===== Phase 4: Results ===== */}
+<<<<<<< HEAD
         {phase === 'result' && selectedTheme && gridCards.length === 9 && (
           <div className="space-y-6 cosmic-anim">
             {question && (
               <div className="cosmic-card p-4 text-center">
                 <p className="text-xs text-muted-foreground">질문 ({selectedTheme.title})</p>
+=======
+        {phase === 'result' && selectedSpread && gridCards.length === 9 && (
+          <div className="space-y-6 cosmic-anim">
+            {question && (
+              <div className="cosmic-card p-4 text-center">
+                <p className="text-xs text-muted-foreground">질문</p>
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                 <p className="mt-1 text-sm font-medium text-foreground">{question}</p>
               </div>
             )}
@@ -309,7 +443,11 @@ export default function FreeTarotPage() {
                   <div className="flex flex-col sm:flex-row">
                     {/* Card front illustration */}
                     <div className="mx-auto aspect-[2/3] w-32 shrink-0 p-4 sm:w-36 sm:p-6">
+<<<<<<< HEAD
                       <TarotCardFront card={card} position={selectedTheme.positions[i]} />
+=======
+                      <TarotCardFront card={card} position={selectedSpread.positions[i]} />
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                     </div>
                     {/* Meaning text */}
                     <div className="flex flex-1 flex-col justify-center p-4 sm:p-6 sm:pl-2">
@@ -318,10 +456,15 @@ export default function FreeTarotPage() {
                           {i + 1}
                         </span>
                         <div>
+<<<<<<< HEAD
                           <p className="text-sm font-bold text-foreground">
                             {card.name} ({card.nameEn})
                           </p>
                           <p className="text-xs text-muted-foreground">{selectedTheme.positions[i]}</p>
+=======
+                          <p className="text-sm font-bold text-foreground">{card.name} ({card.nameEn})</p>
+                          <p className="text-xs text-muted-foreground">{selectedSpread.positions[i]}</p>
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
                         </div>
                       </div>
                       <p className="break-keep text-sm leading-relaxed text-foreground/85">{card.meaning}</p>
@@ -349,4 +492,8 @@ export default function FreeTarotPage() {
       </section>
     </main>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e

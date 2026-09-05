@@ -48,12 +48,15 @@ const StaggeredFade: React.FC<StaggeredFadeProps> = ({ text, delay = 0 }) => {
 export function SajuHero({ onStart }: { onStart: () => void }) {
   return (
     <section className="relative min-h-screen w-full overflow-x-hidden bg-[#030307] text-white">
+<<<<<<< HEAD
       {/* Google Fonts */}
       <link
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap"
         rel="stylesheet"
       />
 
+=======
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
       {/* BACKGROUND: DEEP SPACE + GALAXY + CENTRAL ORB + FLYING BUTTERFLIES */}
       <div className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden">
         <StarField />
@@ -81,6 +84,7 @@ export function SajuHero({ onStart }: { onStart: () => void }) {
         </motion.div>
 
         {/* 메인 헤딩 */}
+<<<<<<< HEAD
         <h1 
           className="mb-6 flex w-full max-w-[calc(100vw-2rem)] flex-col items-center font-serif font-normal leading-[1.08] text-white sm:max-w-5xl sm:leading-[1.12]" 
           style={{ fontFamily: "'Cinzel', 'Garamond', 'Nanum Myeongjo', serif", letterSpacing: '0.04em' }}
@@ -89,6 +93,13 @@ export function SajuHero({ onStart }: { onStart: () => void }) {
             <StaggeredFade text="BEYOND THE STARS," />
           </span>
           <span className="block text-[clamp(1.55rem,9.2vw,5.5rem)] [word-break:keep-all] text-teal-100/90 sm:whitespace-nowrap sm:text-5xl md:text-6xl lg:text-7xl">
+=======
+        <h1 className="mb-6 flex w-full max-w-[calc(100vw-2rem)] flex-col items-center font-normal leading-[1.02] tracking-[-0.04em] text-white sm:max-w-5xl sm:leading-[1.08] sm:tracking-tight" style={{ fontFamily: "'Garamond', 'Times New Roman', serif" }}>
+          <span className="block text-[clamp(1.55rem,9.2vw,6rem)] [word-break:keep-all] sm:whitespace-nowrap sm:text-6xl md:text-7xl lg:text-8xl">
+            <StaggeredFade text="BEYOND THE STARS," />
+          </span>
+          <span className="block text-[clamp(1.55rem,9.2vw,6rem)] [word-break:keep-all] text-teal-100/90 sm:whitespace-nowrap sm:text-6xl md:text-7xl lg:text-8xl">
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
             <StaggeredFade text="DESTINATION AWAITS" delay={0.5} />
           </span>
         </h1>
@@ -117,6 +128,10 @@ export function SajuHero({ onStart }: { onStart: () => void }) {
           <span>운명의 흐름 읽기</span>
           <ArrowRight size={14} className="text-teal-300 transition-transform duration-300 group-hover:translate-x-1" />
         </motion.button>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
       </main>
 
       <style>{`
@@ -168,4 +183,8 @@ export function SajuHero({ onStart }: { onStart: () => void }) {
       `}</style>
     </section>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e

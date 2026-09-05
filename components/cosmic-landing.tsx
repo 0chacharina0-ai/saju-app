@@ -90,7 +90,11 @@ function RobotOrbitOverlay({ videoRef }: { videoRef: RefObject<HTMLVideoElement 
           className={`robot-orbit-screen ${prefersReducedMotion ? 'robot-orbit-static' : ''} ${!isVisible ? 'robot-orbit-paused' : ''}`}
           style={{ animationPlayState: isVisible ? 'running' : 'paused' }}
         >
+<<<<<<< HEAD
           <svg viewBox="0 0 100 64" className="robot-orbit-svg" preserveAspectRatio="xMidYMid slice">
+=======
+          <svg viewBox="0 0 100 64" className="robot-orbit-svg" preserveAspectRatio="xMidYMid meet">
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
             <defs>
               <radialGradient id="robot-screen-glow" cx="50%" cy="50%" r="70%">
                 <stop offset="0%" stopColor="#123b53" stopOpacity="0.96" />
@@ -190,6 +194,7 @@ export function CosmicLanding() {
           background: rgba(255, 255, 255, 0.04);
           box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
         }
+<<<<<<< HEAD
 
         /* 로봇 모니터 오버레이 정밀 레이아웃 정돈 */
         .robot-orbit-stage {
@@ -201,6 +206,17 @@ export function CosmicLanding() {
           z-index: 2;
           pointer-events: none;
           overflow: hidden;
+=======
+        .robot-orbit-stage {
+          position: absolute;
+          left: 9.95%;
+          top: 12.4%;
+          width: 17.9%;
+          height: 17.8%;
+          z-index: 2;
+          pointer-events: none;
+          overflow: visible;
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
         }
         .robot-orbit-track {
           position: absolute;
@@ -212,7 +228,11 @@ export function CosmicLanding() {
           position: absolute;
           inset: 0;
           overflow: hidden;
+<<<<<<< HEAD
           border-radius: 10% / 14%;
+=======
+          border-radius: 16% / 19%;
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
           background: #061522;
           box-shadow: inset 0 0 12px rgba(119, 229, 238, 0.24), 0 0 12px rgba(102, 218, 229, 0.13);
           isolation: isolate;
@@ -222,7 +242,10 @@ export function CosmicLanding() {
           width: 100%;
           height: 100%;
           opacity: 0.94;
+<<<<<<< HEAD
           object-fit: cover;
+=======
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
         }
         .robot-orbit-planet {
           animation: robot-orbit-spin linear infinite;
@@ -353,6 +376,7 @@ export function CosmicLanding() {
 
       {/* SECTION 4: CTA */}
       <section id="contact" className="relative w-full overflow-hidden">
+<<<<<<< HEAD
         {/* 로봇 비디오 컨테이너에 relative 배치 처리 */}
         <div className="relative w-full">
           <video
@@ -367,6 +391,18 @@ export function CosmicLanding() {
           <RobotOrbitOverlay videoRef={robotVideoRef} />
         </div>
 
+=======
+        <video
+          ref={robotVideoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="block h-auto w-full object-cover"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055729_72d66327-b59e-4ae9-bb70-de6ccb5ecdb0.mp4"
+        />
+        <RobotOrbitOverlay videoRef={robotVideoRef} />
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
         <div className="absolute inset-0 flex items-center justify-end px-6 lg:pl-[15%] lg:pr-[20%]">
           <div className="relative flex flex-col text-right">
             <span className="absolute -top-10 left-0 font-condiment text-[32px] text-[#6FFF00] mix-blend-exclusion sm:text-[50px]">
@@ -383,4 +419,8 @@ export function CosmicLanding() {
       </section>
     </div>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3ae522060483c48d143b7f899047cd4ea7ae179e
